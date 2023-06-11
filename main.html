@@ -1,0 +1,85 @@
+<!--  Copyright 2023, A. P., All rights reserved.  -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Canadian Forest Fires Visualization</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Number of Canadian Forest Fires by Year</h1>
+    <p>Using data from Canada’s National Forestry Database (NFD), I used Python, SQLite, D3.js and Observable Plot data visualization libraries to display the number of forest fires by year.</p>
+    <a href="http://nfdp.ccfm.org/en/index.php">http://nfdp.ccfm.org/en/index.php</a>
+
+    <div class="row">
+        <div id="graph">
+          Graph:
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+        <script type="module">
+          //   data = {
+          //   let data = await FileAttachment("data.csv").csv({typed: true});
+          //   const ages = data.columns.slice(1);
+          //   data = d3.sort(data, d => -d3.sum(ages, age => d[age])).slice(0, 6);
+          //   return ages.flatMap((age) => data.map((d) => ({state: d.name, age, population: d[age]})));
+          // };
+          d3.csv("/data_processing/yearly_fires.csv").then((data) => {
+            // forcing data into numeric types
+            // data.forEach(function(row){
+            //   row['Year'] = +row['Year'];
+            //   row['SUM(Number)'] = +row['SUM(Number)'];
+            // });
+            // console.log(data);
+
+            const plot = Plot.plot({
+                width: 1000,
+                height: 600,
+                marginLeft: 50,
+                y: {
+                  grid: true,
+                  label: "Number of Fires",
+                },
+                marks: [
+                  Plot.barY(data, {x: "Year", y: "SUM(Number)"}),
+                  Plot.ruleY([0]),
+                  Plot.text(["Number of Fires by Year"], {frameAnchor: "top"})
+                ]
+              });
+
+            const div = document.querySelector("#graph");
+            div.append(plot);
+          });
+        </script>
+    </div>
+
+    <div class="row">
+      <pre>
+        d3.csv("/data_processing/yearly_fires.csv").then((data) => {
+          const plot = Plot.plot({
+          width: 1000,
+          height: 600,
+          marginLeft: 50,
+          y: {
+            grid: true,
+            label: "Number of Fires",
+          },
+          marks: [
+            Plot.barY(data, {x: "Year", y: "SUM(Number)"}),
+            Plot.ruleY([0]),
+            Plot.text(["Number of Fires by Year"], {frameAnchor: "top"})
+          ]
+        });
+        const div = document.querySelector("#graph");
+        div.append(plot);
+      });
+      </pre>
+    </div>
+  </div>
+</body>
+</html>
