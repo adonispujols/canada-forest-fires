@@ -11,12 +11,13 @@
 </head>
 <body>
   <div class="container">
+    <h1>Data Visualization of Candadian Forest Fire Historical Data</h1>
     <h1>Number of Canadian Forest Fires by Year</h1>
     <p>Using data from Canada’s National Forestry Database (NFD), I used Python, SQLite, D3.js and Observable Plot data visualization libraries to display the number of forest fires by year.</p>
     <a href="http://nfdp.ccfm.org/en/index.php">http://nfdp.ccfm.org/en/index.php</a>
 
     <div class="row">
-        <div id="graph">
+        <div id="n_fires">
           Graph:
         </div>
         <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -52,7 +53,7 @@
                 ]
               });
 
-            const div = document.querySelector("#graph");
+            const div = document.querySelector("#n_fires");
             div.append(plot);
           });
         </script>
@@ -78,6 +79,62 @@
         const div = document.querySelector("#graph");
         div.append(plot);
       });
+      </pre>
+    </div>
+    <h1>Burned Forest Area (Hectares) by Year</h1>
+    <div class="row">
+        <div id="area_fires">
+          Graph:
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+        <script type="module">
+          d3.csv("/data_processing/yearly_area_burned.csv").then((data) => {
+
+            const plot = Plot.plot({
+                width: 1000,
+                height: 600,
+                marginLeft: 75,
+                y: {
+                  grid: true,
+                  label: "Area (Hectares)",
+                },
+                marks: [
+                  Plot.barY(data, {x: "Year", y: "SUM([Area (hectares) null])"}),
+                  Plot.ruleY([0]),
+                  Plot.text(["Burned Forest Area (Hectares)"], {frameAnchor: "top"})
+                ]
+              });
+
+            const div = document.querySelector("#area_fires");
+            div.append(plot);
+          });
+        </script>
+    </div>
+
+    <div class="row">
+      <pre>
+        d3.csv("/data_processing/yearly_area_burned.csv").then((data) => {
+
+            const plot = Plot.plot({
+                width: 1000,
+                height: 600,
+                marginLeft: 75,
+                y: {
+                  grid: true,
+                  label: "Area (Hectares)",
+                },
+                marks: [
+                  Plot.barY(data, {x: "Year", y: "SUM([Area (hectares) null])"}),
+                  Plot.ruleY([0]),
+                  Plot.text(["Burned Forest Area (Hectares)"], {frameAnchor: "top"})
+                ]
+              });
+
+            const div = document.querySelector("#area_fires");
+            div.append(plot);
+          });
       </pre>
     </div>
   </div>
